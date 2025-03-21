@@ -1,115 +1,93 @@
-# OPS01-AWS300 - Deploy a VPC with Terraform
+# AWS VPC Deployment with Terraform
 
-## Cloud Service Provider
-- Amazon Web Services
+## Cloud Provider
+- Amazon Web Services (AWS)
 
-## Difficulty
-- Level 300 (Advanced)
+## Objective
+This guide walks through deploying a **Virtual Private Cloud (VPC)** on AWS using **Terraform**. The goal is to automate network infrastructure provisioning efficiently while ensuring scalability and security.
 
-## Project's Author(s)
-- [Markus Mabson ](https://www.linkedin.com/in/markus-mabson-86917a133/)
+### Steps to Complete:
+1. Install Terraform [Download Terraform](https://www.terraform.io/downloads.html)
+2. Set up and initialize the Terraform workspace.
+3. Design the network architecture (Recommended: [Draw.io](https://www.draw.io/)).
+4. Deploy the following AWS resources using Terraform:
+   - Virtual Private Cloud (VPC)
+   - Route Tables (Public & Private)
+   - Route Table Associations
+   - Internet Gateway
+   - Elastic IP
+   - NAT Gateway
+   - EC2 Instances (1 Public, 1 Private) - Amazon Linux 2 AMI
+   - Security Groups
+5. Validate the connectivity between the instances.
+6. Destroy the Terraform-managed infrastructure.
+7. Confirm the complete deletion of all resources.
 
-## Objectives
+### Network Architecture
+![AWS VPC Architecture](Image.png)
 
-### You need to complete the following:
-- Download terraform binaries [Terraform binaries](https://www.terraform.io/downloads.html)
-- Initialize terraform working directory 
-- Document your environment (Draw.io)
-- Create the following with Terraform deployment
-    - Virtual Private Cloud (VPC)
-    - Route Tables (public/private)
-    - Route Table Associations
-    - Internet Gateway
-    - Elastic IP
-    - Nat Gateway 
-    - 1 EC2 Instance in public/ Private Subnet  (Amazon  Linux 2 AMI)
-    - Security Groups
-- Verify connectivity of public instance / private instance 
-- Delete the Terraform deployment
-- Verify resources are deleted
+---
+## Infrastructure as Code (IaC) Overview
 
-### Architectural Diagram
-![Architecture Diagram](Image.png)
+### **What is Infrastructure as Code (IaC)?**
+**Infrastructure as Code (IaC)** is the practice of defining and managing IT infrastructure using code instead of manual configurations. This approach enables automation, consistency, and version control.
 
-### You need to answer the following:
-### ***What is Infrastructure as Code (IaC)?***
+#### **Benefits of IaC:**
+- **Automation:** Eliminates manual errors and speeds up deployments.
+- **Consistency:** Ensures uniformity across different environments (Dev, Test, Prod).
+- **Version Control:** Changes are tracked and can be rolled back if necessary.
+- **Scalability:** Infrastructure can be modified dynamically with minimal effort.
 
-**Infrastructure as Code (IaC)** is the practice of managing and provisioning computing infrastructure (such as servers, networks, databases, etc.) through machine-readable configuration files, rather than using manual processes or interactive configuration tools. It allows developers and operators to describe the desired infrastructure in code, which can then be version-controlled, automated, and executed in a repeatable manner.
+---
+## Terraform Fundamentals
 
-Key benefits of IaC include:
+### **What is Terraform?**
+Terraform is an open-source tool from **HashiCorp** for defining, provisioning, and managing infrastructure using **HashiCorp Configuration Language (HCL)**. It supports multiple cloud providers, making it ideal for multi-cloud deployments.
 
-- **Automation:** Reduces the need for manual intervention.
-- **Consistency:** Ensures that infrastructure is consistently configured across environments (development, testing, production).
-- **Version Control:** Infrastructure changes can be tracked, reviewed, and reverted like application code.
-- **Scalability:** Large-scale environments can be easily managed and modified.
+#### **Key Features:**
+- **Cloud-Agnostic:** Works across AWS, Azure, GCP, and other platforms.
+- **Declarative Approach:** Users define the desired infrastructure state, and Terraform handles the execution.
+- **State Management:** Uses a state file to track deployed resources and changes.
+- **Plan & Apply:** Users can preview changes before applying them.
 
-### ***What is Terraform?***
+### **What is the Terraform State File?**
+A **state file** is used by Terraform to track the infrastructure's current state. It serves as a reference to ensure consistency between the deployed resources and the defined configurations.
 
-**Terraform** is an open-source IaC tool developed by HashiCorp that allows users to define, provision, and manage infrastructure across various cloud providers (e.g., AWS, Azure, Google Cloud) and other platforms. Terraform uses a declarative language called HCL (HashiCorp Configuration Language) to describe the desired state of infrastructure.
+#### **Why is the State File Important?**
+- **Resource Mapping:** Links real-world resources to Terraform configurations.
+- **Optimization:** Reduces unnecessary API calls for faster deployments.
+- **Dependency Management:** Maintains relationships between resources.
+- **Collaboration:** Enables shared access to infrastructure definitions.
 
-Key features of Terraform include:
+---
+## When to Use Infrastructure as Code
+IaC is essential in various scenarios, including:
 
-- **Provider Agnostic:** Supports multiple cloud providers and platforms, allowing multi-cloud strategies.
-- **Declarative Language:** Users describe the desired infrastructure state, and Terraform handles the steps to achieve it.
-- **State Management:** Terraform tracks the infrastructure changes using state files to ensure the real infrastructure matches the desired configuration.
-- **Plan and Apply:** Users can generate a "plan" before applying changes, which helps avoid mistakes.
+1. **Cloud Infrastructure Management:** Automate cloud resource provisioning.
+2. **Multi-Environment Consistency:** Ensure uniformity across development, staging, and production environments.
+3. **Disaster Recovery:** Quickly restore infrastructure using predefined scripts.
+4. **Scaling & Load Balancing:** Dynamically adjust infrastructure as needed.
+5. **Version Control & Auditability:** Track infrastructure changes over time.
+6. **Collaboration Across Teams:** Standardize infrastructure management across multiple teams.
+7. **Hybrid & Multi-Cloud Strategies:** Deploy resources across multiple cloud providers.
+8. **Security & Compliance:** Define infrastructure policies as code to enforce best practices.
 
-### ***What is a state file used for?***
+---
+## Resources
+- [Terraform Official Documentation](https://www.terraform.io/)
+- [Terraform Module Registry](https://registry.terraform.io/)
 
-A **state file** in Terraform is a critical component that keeps track of the current state of the infrastructure as Terraform manages it. It serves as a source of truth for the resources that have been created and their associated configurations.
+## Cost Considerations
+- Most services used in this deployment fall under AWS Free Tier.
 
-Key purposes of the state file:
+## Estimated Completion Time
+- Approximately **30 minutes**
 
-- **Mapping Real Resources to Configuration:** The state file helps Terraform understand which resources in the real world correspond to the ones described in the code.
-- **Performance Optimization:** It allows Terraform to quickly determine the necessary changes without querying all the resources from the provider.
-- **Tracking Dependencies:** The state file tracks relationships between resources, ensuring they are created, modified, or destroyed in the correct order.
-- **Collaboration:** In shared environments, the state file helps teams collaborate, ensuring consistent infrastructure management.
+## Pro Tips
+- Properly indent Terraform files for readability.
+- Create **dependencies** where necessary to ensure correct resource creation order.
+- Consider pre-generating an **AWS Key Pair** to enable SSH access to EC2 instances.
 
-State files are typically stored locally or remotely (e.g., in an S3 bucket) to enable collaboration and ensure that all users are working from the same state.
-
-### ***In what cases would you use Infrastructure as Code?***
-
-You would use Infrastructure as Code in:
-
-
-**1. Cloud Resource Management:**
-   - Provisioning and managing cloud infrastructure (e.g., VMs, storage, networking) on platforms like AWS, Azure, or Google Cloud.
-
-**2. Consistent Multi-Environment Deployment:**
-   - When you need to ensure that environments such as development, testing, and production are identical, IaC ensures that configuration drift is minimized.
-
-**3. Automating Infrastructure:**
-   - For large-scale or dynamic environments, IaC allows you to automate the deployment, scaling, and management of resources without manual effort.
-
-**4. Disaster Recovery:**
-   - In cases of disaster recovery, IaC can quickly recreate infrastructure from code, significantly reducing downtime.
-
-**5. Version Control and Auditing:**
-   - If you need to track changes over time, IaC allows you to use version control systems (e.g., Git) to audit who made changes and when.
-
-**6. Collaboration in Teams:**
-   - In large organizations where multiple teams work on infrastructure, IaC provides a structured and consistent approach to managing and sharing infrastructure changes.
-
-**7. Infrastructure Testing and Validation:**
-   - IaC allows you to test infrastructure code before applying it, reducing the chances of errors in production.
-
-**8. Hybrid or Multi-Cloud Environments:**
-   - IaC can simplify the management of hybrid or multi-cloud environments by providing a unified way to define and manage infrastructure across different providers.
-
-## References
-- [Terraform](https://www.terraform.io/)
-- [Terraform module registry](https://registry.terraform.io/)
-
-## Costs
-- Included in the Free Tier
-
-## Estimated time to complete
-- 30 minutes
-
-## Tips
-- Indent your code to make it concise and readable
-Some resources may need to wait for another resource to be created. 
-- It may be useful to create a key_pair in the management UI before creating the EC2 instances
-
-## Output
-![alt text](Image.gif)
+---
+## Deployment Output
+![Terraform Deployment Output](Image.gif)
